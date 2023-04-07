@@ -2,7 +2,9 @@ var startQuizButton = document.querySelector("#start-button");
 var submitButton = document.querySelector("#submit-button");
 
 var scoreUsername = document.querySelector("#score-username");
-var finalScore = document.querySelector("#final-score");
+var finalHScore = document.querySelector("#final-h-score");
+var finalLScore = document.querySelector("#final-l-score"); // or sort list / h-score?
+var finalScoreList = document.querySelector("#final-score-list");
 var scoreBackButton = document.querySelector("#score-back-btn");
 var scoreClearButton = document.querySelector("#score-clr-btn");
 

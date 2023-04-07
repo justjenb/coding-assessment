@@ -33,7 +33,7 @@ button {
   font-size: 2em;
   letter-spacing: 0.21px;
   line-height: 16px;
-  max-width: 255px;
+  max-width: fit-content;
   padding: 20px 52px;
   text-align: center;
   transition-duration: 0.15s;
