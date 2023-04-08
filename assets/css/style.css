@@ -64,11 +64,11 @@ section {
   border-radius: 8px;
 }
 
-.qn {
+.question-text {
   display: none;
 }
 
-.qn:first-child {
+.question-text:first-child {
   display: block;
 }
 

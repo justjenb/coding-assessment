@@ -1,107 +1,153 @@
-var startQuizButton = document.querySelector(".start-button");
-var submitButton = document.querySelector(".submit-button");
+const startQuizButton = document.querySelector(".start-button");
+const submitButton = document.querySelector("#submit");
 
-var scoreUsername = document.querySelector(".score-username");
-var finalHScore = document.querySelector(".final-h-score");
-var finalLScore = document.querySelector(".final-l-score"); // or sort list / h-score?
-var finalScoreList = document.querySelector(".final-score-list");
-var scoreBackButton = document.querySelector(".score-back-btn");
-var scoreClearButton = document.querySelector(".score-clr-btn");
+const scoreUsername = document.querySelector(".score-username");
+const finalScoreList = document.querySelector(".final-score-list");
+const scoreBackButton = document.querySelector(".score-back-btn");
+const scoreClearButton = document.querySelector(".score-clr-btn");
 
-var rightWrongMessage = document.querySelector(".right-wrong-msg");
-var questionOptionText = document.querySelector(".question-text");
-var questionOptionButton = document.querySelector(".question-choices");
+const rightWrongMessage = document.querySelector(".right-wrong-msg");
+const questionOptionText = document.querySelector(".question-text");
+const questionOptionButton = document.querySelector(".question-choices");
+const timerElement = document.querySelector(".timer-count");
 
-var topTenScores = 10;
+
+const topTenScores = 10;
+var questionNo = 0;
+var timer;
+var timerCount;
 
 const questionSheet = [
   {
-    question: "This is question 1",
-    choices: ["choice 1", "choice 2", "choice 3", "choice 4"],
-    answer: "choice 3",
+    question: "Which of the following is not a data type in JavaScript?",
+    choices: ["Selector", "Object", "Symbol", "Undefined"],
+    answer: "Selector",
   },
   {
-    question: "This is question 2",
-    choices: ["choice 1", "choice 2", "choice 3", "choice 4"],
-    answer: "choice 1",
+    question: "Which of the following values is truthy?",
+    choices: ["x = 0", "NaN", "y = 'Bootcamp'", "null === undefined"],
+    answer: "y = 'Bootcamp'",
   },
   {
-    question: "This is question 3",
-    choices: ["choice 1", "choice 2", "choice 3", "choice 4"],
-    answer: "choice 2",
+    question: "Which of the following values is not truthy?",
+    choices: ["0 == false", "1 == '1'", "0 === false", "null == undefined"],
+    answer: "0 === false",
   },
   {
-    question: "This is question 4",
-    choices: ["choice 1", "choice 2", "choice 3", "choice 4"],
-    answer: "choice 4",
+    question: "Which of the following is not one of the three states of promise?",
+    choices: ["Pending", "Fulfilled", "Rejected", "Pinky"],
+    answer: "Pinky",
   },
 ];
 
-startQuizButton.addEventListener("click", function (event) {
-  var element = event.target;
-  showQuestion();
-});
-
-function showQuestion() {
-  questionOptionText.innerHTML = "";
-
-  for (i = 0; i < questionSheet.length; i++) {
-    var questionContainer = document.createElement("form");
-    questionContainer.textContent = questionSheet[i].question;
-    var lineBreak = document.createElement("br");
-    questionContainer.appendChild(lineBreak);
-    var questionChoices = questionSheet[i].choices;
-
-    console.log(JSON.stringify(questionSheet[i]));
-    console.log(questionContainer);
-    console.log(questionChoices);
-
-    for (i = 0; i < questionChoices.length; i++) {
-      var questionBtn = document.createElement("input");
-      var questionLbl = document.createElement("label");
-      questionBtn.setAttribute("data-index", i);
-      questionBtn.setAttribute("type", "radio");
-      questionBtn.setAttribute("name", "radio");
-      questionBtn.setAttribute("id", questionChoices[i]);
-      questionLbl.textContent = questionChoices[i];
-      questionLbl.setAttribute("for", questionChoices[i]);
-      questionContainer.appendChild(questionBtn);
-      questionContainer.appendChild(questionLbl);
-      var lineBreak = document.createElement("br");
-      questionLbl.appendChild(lineBreak);
-    }
-
-    questionOptionText.appendChild(questionContainer);
+function setAttributes(el, attrs) {
+  for(var key in attrs) {
+    el.setAttribute(key, attrs[key]);
   }
 }
 
-questionOptionButton.addEventListener("click", function () {
-    var current = $(".qn:visible");
-    current.hide();
-    current.next().show();
-  });
+startQuizButton.addEventListener("click", function (event) {
+  var element = event.target;
+  timerCount = 40;
+  startQuizButton.disabled = true;
+  showQuestion(questionNo);
+  startTimer();
+});
 
-// // Randomly picks question from questionSheet array
-//
-//   var question = questionSheet[i];
+function startTimer() {
+  // Sets timer
+  timer = setInterval(function() {
+    timerCount--;
+    timerElement.textContent = timerCount;
+    if (timerCount >= 0) {
+      // Tests if win condition is met
+      if (isWin && timerCount > 0) {
+        // Clears interval and stops timer
+        clearInterval(timer);
+        winGame();
+      }
+    }
+    // Tests if time has run out
+    if (timerCount === 0) {
+      // Clears interval
+      clearInterval(timer);
+      loseGame();
+    }
+  }, 1000);
+}
 
-//   var questionContainer = document.createElement('div');
-//   var questionText = document.createElement('li');
+function showQuestion(i) {
+  questionOptionText.innerHTML = "";
 
-//   questionContainer.textContent = question;
+  var currentQuestion = questionSheet[i];
+  var questionContainer = document.createElement("form");
 
-//   var options = question[i].choices;
-//   for (var opt in options) {
-//     questionText.textContent = opt[i].opt;
-//     questionContainer.appendChild(questionText);
-//     questionText.setAttribute("data-index", i);
+  questionContainer.textContent = currentQuestion.question;
+  questionContainer.setAttribute("class", "qn-form");
 
-//   }
-//   questionOptionButton.appendChild(questionContainer);
+  var lineBreak = document.createElement("br");
+  questionContainer.appendChild(lineBreak);
 
-// }
+  var questionChoices = currentQuestion.choices;
+
+    for (j = 0; j < questionChoices.length; j++) {
+      var questionBtn = document.createElement("input");
+      var questionLbl = document.createElement("label");
+
+      setAttributes(questionBtn, {"data-index": i, "type": "radio", "name": "radio", "id": questionChoices[j]})
+
+      questionLbl.textContent = questionChoices[j];
+      questionLbl.setAttribute("for", questionChoices[j]);
+
+      questionContainer.appendChild(questionBtn);
+      questionContainer.appendChild(questionLbl);
+
+      var lineBreak = document.createElement("br");
+      questionLbl.appendChild(lineBreak);
+    }
+  questionOptionText.appendChild(questionContainer);
+}
+
+
+submitButton.addEventListener("click", function() {
+  currentQuestion = questionSheet[questionNo];
+  questionChoices = currentQuestion.choices;
+
+  var questionAnswer = currentQuestion.answer;
+  var selectedAnswer = null;
+
+  for (var i = 0; i < questionChoices.length; i++) {
+    var optionsButton = document.getElementById(questionChoices[i]);
+    if (optionsButton.checked) {
+      selectedAnswer = optionsButton.id;
+      break;
+    }
+  }
+
+  if (selectedAnswer === null) {
+    console.log("No answer is selected.");
+    return;
+  }
+
+  if (selectedAnswer === questionAnswer) {
+    console.log("you are correct");
+    rightWrongMessage.textContent = "You are correct!"
+  } else {
+    console.log("you are incorrect");
+    rightWrongMessage.textContent = "You are wrong!"
+  }
+
+  questionNo++
+  if (questionNo < questionSheet.length) {
+    showQuestion(questionNo);
+  } else {    
+    console.log("Quiz complete.");
+    storeScore();
+  }
+});
 
 function storeScore() {
+  var finalScore
   // Stringify and set key in localStorage to finalScoreList array
   localStorage.setItem("finalScoreList", JSON.stringify(finalScoreList));
 }
