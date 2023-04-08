@@ -64,6 +64,18 @@ section {
   border-radius: 8px;
 }
 
+.qn {
+  display: none;
+}
+
+.qn:first-child {
+  display: block;
+}
+
+input[type="submit"] {
+  display:none;
+}
+
 .question-text {
   width: 55vw;
   height: 400px;
@@ -136,4 +148,4 @@ section {
   .timer {
     height: 200px;
   }
- 
+}

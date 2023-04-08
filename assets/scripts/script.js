@@ -46,8 +46,10 @@ function showQuestion() {
   questionOptionText.innerHTML = "";
 
   for (i = 0; i < questionSheet.length; i++) {
-    var questionContainer = document.createElement("div");
+    var questionContainer = document.createElement("form");
     questionContainer.textContent = questionSheet[i].question;
+    var lineBreak = document.createElement("br");
+    questionContainer.appendChild(lineBreak);
     var questionChoices = questionSheet[i].choices;
 
     console.log(JSON.stringify(questionSheet[i]));
@@ -55,32 +57,49 @@ function showQuestion() {
     console.log(questionChoices);
 
     for (i = 0; i < questionChoices.length; i++) {
-      var questionLi = document.createElement("li");
-      questionLi.textContent = questionChoices[i];
-      questionContainer.appendChild(questionLi);
+      var questionBtn = document.createElement("input");
+      var questionLbl = document.createElement("label");
+      questionBtn.setAttribute("data-index", i);
+      questionBtn.setAttribute("type", "radio");
+      questionBtn.setAttribute("name", "radio");
+      questionBtn.setAttribute("id", questionChoices[i]);
+      questionLbl.textContent = questionChoices[i];
+      questionLbl.setAttribute("for", questionChoices[i]);
+      questionContainer.appendChild(questionBtn);
+      questionContainer.appendChild(questionLbl);
+      var lineBreak = document.createElement("br");
+      questionLbl.appendChild(lineBreak);
     }
+
     questionOptionText.appendChild(questionContainer);
   }
-  // // Randomly picks question from questionSheet array
-  //
-  //   var question = questionSheet[i];
-
-  //   var questionContainer = document.createElement('div');
-  //   var questionText = document.createElement('li');
-
-  //   questionContainer.textContent = question;
-
-  //   var options = question[i].choices;
-  //   for (var opt in options) {
-  //     questionText.textContent = opt[i].opt;
-  //     questionContainer.appendChild(questionText);
-  //     questionText.setAttribute("data-index", i);
-
-  //   }
-  //   questionOptionButton.appendChild(questionContainer);
-
-  // }
 }
+
+questionOptionButton.addEventListener("click", function () {
+    var current = $(".qn:visible");
+    current.hide();
+    current.next().show();
+  });
+
+// // Randomly picks question from questionSheet array
+//
+//   var question = questionSheet[i];
+
+//   var questionContainer = document.createElement('div');
+//   var questionText = document.createElement('li');
+
+//   questionContainer.textContent = question;
+
+//   var options = question[i].choices;
+//   for (var opt in options) {
+//     questionText.textContent = opt[i].opt;
+//     questionContainer.appendChild(questionText);
+//     questionText.setAttribute("data-index", i);
+
+//   }
+//   questionOptionButton.appendChild(questionContainer);
+
+// }
 
 function storeScore() {
   // Stringify and set key in localStorage to finalScoreList array
