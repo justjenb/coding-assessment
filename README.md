@@ -8,3 +8,6 @@ Line breaks in the DOM [colinaz](https://board.phpbuilder.com/d/10361933-resolve
 
 Radio button fun [Mark Biek and Pragnesh Rupapara](https://stackoverflow.com/a/1423783)
 
+Set multiple attributes on an element [Ariel](https://stackoverflow.com/a/12274782)
+
+Referenced when building the high score table [Minna N.](https://dev.to/minna_xd/adding-a-high-score-table-to-javascript30-whack-a-mole-4adk)

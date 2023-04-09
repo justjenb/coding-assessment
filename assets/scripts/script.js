@@ -1,22 +1,34 @@
-const startQuizButton = document.querySelector(".start-button");
-const submitButton = document.querySelector("#submit");
+// Start Quiz, View High Scores, Submit buttons on the index page
+const startQuizButton = document.querySelector("#start-button");
+const viewHighScoreButton = document.querySelector("#highscore-button");
+const submitButton = document.querySelector("#submit-btn");
 
-const scoreUsername = document.querySelector(".score-username");
-const finalScoreList = document.querySelector(".final-score-list");
-const scoreBackButton = document.querySelector(".score-back-btn");
-const scoreClearButton = document.querySelector(".score-clr-btn");
+// Back and Clear buttons on the High Score page
+const scoreBackButton = document.querySelector("#score-back-btn");
+const scoreClearButton = document.querySelector("#score-clr-btn");
 
-const rightWrongMessage = document.querySelector(".right-wrong-msg");
+// The question text with options, warning message about correct/incorrect questions, the timer and scorekeeper
 const questionOptionText = document.querySelector(".question-text");
 const questionOptionButton = document.querySelector(".question-choices");
+const rightWrongMessage = document.querySelector(".right-wrong-msg");
 const timerElement = document.querySelector(".timer-count");
+const displayGameScore = document.querySelector(".display-score");
+const qnForm = document.querySelector(".qn-form");
 
+// Field to record username, the final score table, the stored high scores, max score table size
+const scoreUsername = document.querySelector(".score-username");
+const finalScoreTable = document.querySelector(".final-score-table");
+const finalScoreList = JSON.parse(localStorage.getItem("finalScoreList")) || []; // from local storage or empty array
+const maxScoreTableSize = 3;
 
-const topTenScores = 10;
-var questionNo = 0;
-var timer;
-var timerCount;
+// Setting working items that will be increasing or decreasing during the game
+let timer;
+let timerCount = 60;
+let questionNo = 0;
+let gameScore = 0;
+let worstScore = 0;
 
+// The questions, choices, and answers
 const questionSheet = [
   {
     question: "Which of the following is not a data type in JavaScript?",
@@ -34,46 +46,27 @@ const questionSheet = [
     answer: "0 === false",
   },
   {
-    question: "Which of the following is not one of the three states of promise?",
+    question:
+      "Which of the following is not one of the three states of promise?",
     choices: ["Pending", "Fulfilled", "Rejected", "Pinky"],
     answer: "Pinky",
   },
 ];
 
+// Assign multiple attributes to an element
 function setAttributes(el, attrs) {
-  for(var key in attrs) {
+  for (var key in attrs) {
     el.setAttribute(key, attrs[key]);
   }
 }
 
-startQuizButton.addEventListener("click", function (event) {
-  var element = event.target;
-  timerCount = 40;
-  startQuizButton.disabled = true;
-  showQuestion(questionNo);
-  startTimer();
-});
-
-function startTimer() {
-  // Sets timer
-  timer = setInterval(function() {
-    timerCount--;
-    timerElement.textContent = timerCount;
-    if (timerCount >= 0) {
-      // Tests if win condition is met
-      if (isWin && timerCount > 0) {
-        // Clears interval and stops timer
-        clearInterval(timer);
-        winGame();
-      }
-    }
-    // Tests if time has run out
-    if (timerCount === 0) {
-      // Clears interval
-      clearInterval(timer);
-      loseGame();
-    }
-  }, 1000);
+if (startQuizButton) {
+  startQuizButton.addEventListener("click", function (event) {
+    var element = event.target;
+    startQuizButton.disabled = true;
+    showQuestion(questionNo);
+    startTimer();
+  });
 }
 
 function showQuestion(i) {
@@ -90,93 +83,172 @@ function showQuestion(i) {
 
   var questionChoices = currentQuestion.choices;
 
-    for (j = 0; j < questionChoices.length; j++) {
-      var questionBtn = document.createElement("input");
-      var questionLbl = document.createElement("label");
+  for (j = 0; j < questionChoices.length; j++) {
+    var questionBtn = document.createElement("input");
+    var questionLbl = document.createElement("label");
 
-      setAttributes(questionBtn, {"data-index": i, "type": "radio", "name": "radio", "id": questionChoices[j]})
+    setAttributes(questionBtn, {
+      type: "radio",
+      name: "radio",
+      id: questionChoices[j],
+    });
 
-      questionLbl.textContent = questionChoices[j];
-      questionLbl.setAttribute("for", questionChoices[j]);
+    questionLbl.textContent = questionChoices[j];
+    questionLbl.setAttribute("for", questionChoices[j]);
 
-      questionContainer.appendChild(questionBtn);
-      questionContainer.appendChild(questionLbl);
+    questionContainer.appendChild(questionBtn);
+    questionContainer.appendChild(questionLbl);
 
-      var lineBreak = document.createElement("br");
-      questionLbl.appendChild(lineBreak);
-    }
+    var lineBreak = document.createElement("br");
+    questionLbl.appendChild(lineBreak);
+  }
   questionOptionText.appendChild(questionContainer);
 }
 
-
-submitButton.addEventListener("click", function() {
-  currentQuestion = questionSheet[questionNo];
-  questionChoices = currentQuestion.choices;
-
-  var questionAnswer = currentQuestion.answer;
-  var selectedAnswer = null;
-
-  for (var i = 0; i < questionChoices.length; i++) {
-    var optionsButton = document.getElementById(questionChoices[i]);
-    if (optionsButton.checked) {
-      selectedAnswer = optionsButton.id;
-      break;
+function startTimer() {
+  // Sets timer
+  timer = setInterval(function () {
+    timerCount--;
+    timerElement.textContent = timerCount;
+    // Tests if win condition is met
+    if (questionNo === questionSheet.length && timerCount > 0) {
+      // Clears interval and stops timer
+      clearInterval(timer);
     }
+    // Tests if time has run out
+    if (timerCount <= 0) {
+      // Clears interval
+      clearInterval(timer);
+    }
+  }, 1000);
+}
+
+if (submitButton) {
+  submitButton.addEventListener("click", function () {
+
+    if (timerCount <= 0) {
+      rightWrongMessage.textContent = "Game over!";
+      return;
+    }
+
+    currentQuestion = questionSheet[questionNo];
+    questionChoices = currentQuestion.choices;
+
+    var questionAnswer = currentQuestion.answer;
+    var selectedAnswer = null;
+
+    for (var i = 0; i < questionChoices.length; i++) {
+      var optionsButton = document.getElementById(questionChoices[i]);
+      if (optionsButton.checked) {
+        selectedAnswer = optionsButton.id;
+        break;
+      }
+    }
+
+    if (selectedAnswer === null) {
+      console.log("No answer is selected.");
+      return;
+    }
+
+    if (selectedAnswer === questionAnswer) {
+      console.log("you are correct");
+      rightWrongMessage.textContent = "You are correct!";
+      gameScore++;
+      displayGameScore.textContent = gameScore;
+    } else {
+      console.log("you are incorrect");
+      rightWrongMessage.textContent = "You are wrong!";
+      timerCount -= 10;
+    }
+
+    questionNo++;
+
+    if (questionNo < questionSheet.length) {
+      showQuestion(questionNo);
+    } else {
+      console.log("Quiz complete.");
+      rightWrongMessage.textContent = "Game over!";
+      displayGameScore.textContent = gameScore;
+      startQuizButton.disabled = false;
+      checkScore();
+    }
+  });
+}
+
+function checkScore() {
+  if (finalScoreList.length > maxScoreTableSize) {
+    worstScore = finalScoreList[finalScoreList.length - 1].gameScore;
   }
 
-  if (selectedAnswer === null) {
-    console.log("No answer is selected.");
-    return;
-  }
-
-  if (selectedAnswer === questionAnswer) {
-    console.log("you are correct");
-    rightWrongMessage.textContent = "You are correct!"
+  if (gameScore > worstScore) {
+    const namePrompt = window.prompt(
+      `${gameScore}! Top score! What's your name?`
+    );
+    finalScoreList.push({ gameScore, namePrompt });
   } else {
-    console.log("you are incorrect");
-    rightWrongMessage.textContent = "You are wrong!"
+    alert("Game over!\nSorry, you didn't get a high score.\nTry again!");
   }
 
-  questionNo++
-  if (questionNo < questionSheet.length) {
-    showQuestion(questionNo);
-  } else {    
-    console.log("Quiz complete.");
-    storeScore();
-  }
-});
+  finalScoreList.sort((a, b) => (a.gameScore > b.gameScore ? -1 : 1));
 
-function storeScore() {
-  var finalScore
-  // Stringify and set key in localStorage to finalScoreList array
+  if (finalScoreList.length > maxScoreTableSize) {
+    finalScoreList.pop();
+  }
   localStorage.setItem("finalScoreList", JSON.stringify(finalScoreList));
 }
 
-function renderScores() {
-  for (var i = 0; i < finalScoreList.length; i++) {
-    var score = finalScoreList[i];
+if (viewHighScoreButton) {
+  viewHighScoreButton.addEventListener("click", function (event) {
+    var element = event.target;
+    window.location.href = "highscore.html";
+  });
+}
 
-    var li = document.createElement("li");
-    li.textContent = score;
-    li.setAttribute("data-index", i);
+if (scoreBackButton) {
+  scoreBackButton.addEventListener("click", function (event) {
+    var element = event.target;
+    console.log("clicking score back button");
+    window.location.href = "index.html";
+  });
+}
 
-    finalScoreList.appendChild(li);
-  }
+if (scoreClearButton) {
+  scoreClearButton.addEventListener("click", function (event) {
+    finalScoreList.splice(0, finalScoreList.length);
+    localStorage.setItem("finalScoreList", JSON.stringify(finalScoreList));
+    displayScore(finalScoreList, finalScoreTable);
+  });
 }
 
 function displayScore() {
-  // Get stored scores from localStorage
-  var storedScores = JSON.parse(localStorage.getItem("finalScoreList"));
+  finalScoreTable.innerHTML = "";
 
-  // If scores were retrieved from localStorage, update the scores array to it
-  if (storedScores !== null) {
-    scores = storedScores;
-  }
+  const headerRow = document.createElement("tr");
+  const headerUser = document.createElement("th");
+  const headerScore = document.createElement("th");
 
-  // This is a helper function that will render scores to the DOM
-  renderScores();
+  headerUser.textContent = "User";
+  headerScore.textContent = "Score";
+
+  headerRow.appendChild(headerUser);
+  headerRow.appendChild(headerScore);
+  finalScoreTable.appendChild(headerRow);
+
+  finalScoreList.forEach((entry) => {
+    const scoreRow = document.createElement("tr");
+    const userCell = document.createElement("td");
+    const scoreCell = document.createElement("td");
+
+    userCell.textContent = entry.namePrompt;
+    scoreCell.textContent = entry.gameScore;
+
+    scoreRow.appendChild(userCell);
+    scoreRow.appendChild(scoreCell);
+
+    finalScoreTable.appendChild(scoreRow);
+  });
 }
 
-function clearScores() {
-  finalScoreList = "";
+if (document.body.contains(finalScoreTable)) {
+  displayScore();
 }

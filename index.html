@@ -9,17 +9,20 @@
   <body>
     <header>
       <div class= "large-font">Coding Quiz Challenge</div>
-      <button class="start-button">Start Quiz</button>
-      <button class="start-button" onclick="window.location.href='highscore.html'">View High Scores</button>
+      <button id="start-button">Start Quiz</button>
+      <button id="highscore-button">View High Scores</button>
     </header>
 
     <main>
       <section>
         <div class="card question-text">
-          <div class="right-wrong-msg">Test</div>
         </div>
-        <button type="submit" id="submit">Submit</button>
-        <div class="large-font timer-count">40</div>
+        <button type="submit" id="submit-btn">Submit</button>
+        <span>Timer:</span>
+        <span class="large-font timer-count">60</span>
+        <span>Score:</span>
+        <span class="large-font display-score">0</span>
+        <span class="right-wrong-msg">Good luck!</span>
       </section>
     </main>
     
