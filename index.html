@@ -14,15 +14,20 @@
     </header>
 
     <main>
-      <section>
+      <section id="question-area">
         <div class="card question-text">
         </div>
         <button type="submit" id="submit-btn">Submit</button>
-        <span>Timer:</span>
-        <span class="large-font timer-count">60</span>
-        <span>Score:</span>
-        <span class="large-font display-score">0</span>
+        <span class="timer">Timer:<span class="timer timer-count">120</span></span>
+        <span class="score">Score: <span class="display-score">0</span></span>
         <span class="right-wrong-msg">Good luck!</span>
+      </section>
+      <section id="game-over-section" style="display: none;">
+        <h2>Game Over!</h2>
+        <p>Your score is: <span id="final-score"></span></p>
+        <label for="username-input">Enter your name:</label>
+        <input type="text" id="username-input" />
+        <button id="save-score-button">Save Score</button>
       </section>
     </main>
     

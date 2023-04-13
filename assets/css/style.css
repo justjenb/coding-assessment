@@ -3,44 +3,46 @@
 }
 
 body {
-  font-family: Arial;
+  font-family: 'Roboto', Arial, sans-serif;
   margin: 0;
   display: flex;
   flex-direction: column;
+  font-size: 20px;
   min-height: 100vh;
   justify-content: flex-start;
-  background: linear-gradient(0deg, rgba(19,41,61,1) 0%, rgba(237,245,249,1) 63%);
+  background: linear-gradient(0deg, rgba(19, 41, 61, 1) 0%, rgba(237, 245, 249, 1) 63%);
 }
 
 button {
-  background: radial-gradient(circle, rgba(240,230,140,1) 0%, rgba(187,96,33,0.9542191876750701) 100%);
+  background: rgba(19, 41, 61, 1);
   border-radius: 8px;
-  color: #13293d;
+  color: #fff;
   cursor: pointer;
-  font-size: 2em;
-  letter-spacing: 0.21px;
-  line-height: 16px;
-  max-width: fit-content;
-  padding: 20px 52px;
+  font-size: 1.25em;
+  padding: 10px 25px;
   text-align: center;
-  transition-duration: 0.15s;
-  transition-property: background-color;
-  transition-timing-function: linear;
+  transition: all 0.15s linear;
   margin-top: 0.6em;
+}
+
+button:hover {
+  background: rgba(10, 25, 47, 1);
+  transform: scale(1.02);
 }
 
 header {
   padding: 40px;
   text-align: center;
-  background: #13293d;
+  background: #001d3d;
   color: #fff;
-  border-bottom:30px #879274;
+  border-bottom: 5px solid #778da9;
 }
 
 main {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
+  padding: 20px;
 }
 
 section {
@@ -49,6 +51,7 @@ section {
   margin-top: 50px;
   background-color: white;
   border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .reset-button {
@@ -85,14 +88,78 @@ section {
 }
 
 .card {
-  background: radial-gradient(circle, rgba(240,230,140,1) 0%, rgba(187,124,33,0.604079131652661) 100%);
+  background: hsla(27, 87%, 67%, 1);
+  background: radial-gradient(circle, hsla(27, 87%, 67%, 1) 79%, hsla(12, 76%, 61%, 1) 100%);
+  background: -moz-radial-gradient(circle, hsla(27, 87%, 67%, 1) 79%, hsla(12, 76%, 61%, 1) 100%);
+  background: -webkit-radial-gradient(circle, hsla(27, 87%, 67%, 1) 79%, hsla(12, 76%, 61%, 1) 100%);
+  filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#F4A261", endColorstr="#E76F51", GradientType=1 );
   border: 1px solid #eceff1;
   border-radius: 8px;
   box-shadow: rgba(60, 64, 67, 2) 0 1px 2px 0,
     rgba(60, 64, 67, 0.15) 0 2px 4px 3px;
-  margin: auto;
-  padding: 20px;
-}
+    margin: auto;
+    padding: 20px;
+  }
+  
+  .word-blanks {
+    line-height: 360px;
+  }
+  
+  .large-font {
+    font-size: 3.5em;
+    text-align: center;
+  }
+  
+  .timer, 
+  .score,
+  .right-wrong-msg {
+    height: 240px;
+    padding: 10px;
+    background: #13293d;
+    color: #fff;
+    text-align: center;
+  }
+
+  .right-wrong-msg {
+    width: 200px;
+  }
+  
+  .timer-text {
+    padding: 55px;
+  }
+  
+  @media screen and (max-width: 1183px) {
+    main {
+      flex-direction: column;
+    }
+  
+    .question-text,
+    .results {
+      width: 90vw;
+    }
+  
+    section {
+      background-color: white;
+      margin: 20px auto;
+      width: 92vw;
+    }
+  }
+  
+  @media screen and (max-width: 504px) {
+    .large-font {
+      font-size: 2em;
+    }
+  
+    .reset-button {
+      font-size: 12px;
+      width: 200px;
+    }
+  
+    .timer {
+      height: 200px;
+    }
+  }
+  
 
 .word-blanks {
   line-height: 360px;
