@@ -34,9 +34,9 @@ No installation required, but if you want to run this locally:
 
 ## Preview
 
-[Link to site](https://justjenb.github.io/password_generator/)
+[Link to site](https://justjenb.github.io/coding-assessment/)
 
-![Screenshot of password generator](./assets/img/pgen.png)
+![Screenshot of coding quiz challenge](./assets/images/coding-assess.png)
 
 ## Credits
 
