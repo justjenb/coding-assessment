@@ -2,11 +2,9 @@
 
 ## Description
 
-As a technology professional with over a decade of experience, I understand the importance of online security, and creating strong, unique passwords is a crucial aspect of that.
+As a student and technology professional with a decade of experience, creating a coding assessment webpage has been an excellent way to challenge myself and showcase my coding skills. This project has allowed me to practice problem-solving, algorithm development, and code optimization. 
 
-I wanted to create this password generator to make it easier for myself and others to generate secure passwords, and by offering customization options the generator allows users to create passwords that suit their needs and preferences, while maintaining a high level of security.
-
-Working on this project has allowed me to strengthen my programming skills in HTML, CSS, and JavaScript, and develop a better understanding of web development and user experience design.
+Building this coding assessment webpage has given me the opportunity to design, develop, and deploy a complete web application using JavaScript. In creating this project it has helped me grow as a developer and continue learning more about web design.
 
 ## Installation
 
